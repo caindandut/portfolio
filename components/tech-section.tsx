@@ -131,7 +131,7 @@ export default function TechSection() {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
         <div
-          className={`text-center mb-12 md:mb-16 transition-all duration-700 ${
+          className={`text-center mb-12 md:mb-16 transition-all duration-700 ease-out ${
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
@@ -144,13 +144,18 @@ export default function TechSection() {
 
         {/* Tech Categories */}
         <div className="grid gap-6 md:gap-8">
-          {techCategories.map((category, categoryIndex) => (
+          {techCategories.map((category, categoryIndex) => {
+            // Alternate slide direction for visual interest
+            const slideDirection = categoryIndex % 2 === 0 ? "-translate-x-10" : "translate-x-10"
+            const slideDirectionActive = "translate-x-0"
+            
+            return (
             <Card
               key={category.title}
-              className={`glass-card border-border/50 hover:border-primary/30 transition-all duration-700 hover:shadow-lg hover:shadow-primary/5 ${
-                isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              className={`glass-card border-border/50 hover:border-primary/30 transition-all duration-700 ease-out hover:shadow-lg hover:shadow-primary/5 ${
+                isInView ? `opacity-100 ${slideDirectionActive}` : `opacity-0 ${slideDirection}`
               }`}
-              style={{ transitionDelay: `${categoryIndex * 100}ms` }}
+              style={{ transitionDelay: `${categoryIndex * 150}ms` }}
             >
               <CardHeader className="pb-2 md:pb-4">
                 <CardTitle className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 md:gap-3">
@@ -163,11 +168,11 @@ export default function TechSection() {
                   {category.items.map((item, itemIndex) => (
                     <div
                       key={item.name}
-                      className={`group flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 hover:bg-primary/10 border border-border/50 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-lg hover:shadow-primary/10 ${
-                        isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+                      className={`group flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 hover:bg-primary/10 border border-border/50 hover:border-primary/50 transition-all duration-500 ease-out cursor-pointer hover:scale-105 hover:shadow-lg hover:shadow-primary/10 ${
+                        isInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
                       }`}
                       style={{
-                        transitionDelay: `${categoryIndex * 100 + itemIndex * 50}ms`,
+                        transitionDelay: `${categoryIndex * 150 + itemIndex * 50}ms`,
                       }}
                     >
                       <div className="relative">
@@ -189,7 +194,8 @@ export default function TechSection() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

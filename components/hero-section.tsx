@@ -8,22 +8,31 @@ function AnimatedTitle() {
   const [currentPhrase, setCurrentPhrase] = useState(0)
   const [isTyping, setIsTyping] = useState(true)
   const [showCursor, setShowCursor] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
 
   const phrases = [
     { text: "Hi, I'm Le Dang Khanh", highlight: "Le Dang Khanh" },
     { text: "Web Developer", highlight: "Web Developer" },
   ]
 
+  // Set mounted state to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   // Cursor blink effect
   useEffect(() => {
+    if (!isMounted) return
     const cursorInterval = setInterval(() => {
       setShowCursor((prev) => !prev)
     }, 530)
     return () => clearInterval(cursorInterval)
-  }, [])
+  }, [isMounted])
 
-  // Typing effect
+  // Typing effect - only start after mount to prevent hydration issues
   useEffect(() => {
+    if (!isMounted) return
+    
     const phrase = phrases[currentPhrase].text
 
     if (isTyping) {
@@ -52,7 +61,7 @@ function AnimatedTitle() {
         setIsTyping(true)
       }
     }
-  }, [displayText, isTyping, currentPhrase])
+  }, [displayText, isTyping, currentPhrase, isMounted])
 
   return (
     <div className="relative">
@@ -77,12 +86,14 @@ function AnimatedTitle() {
             {displayText}
           </span>
 
-          {/* Glowing cursor */}
-          <span
-            className={`inline-block w-[3px] md:w-[4px] h-[0.85em] ml-1 md:ml-2 rounded-full bg-gradient-to-b from-primary to-cyan-400 align-middle shadow-lg shadow-primary/50 transition-opacity duration-100 ${
-              showCursor ? "opacity-100" : "opacity-0"
-            }`}
-          />
+          {/* Glowing cursor - only show after mount */}
+          {isMounted && (
+            <span
+              className={`inline-block w-[3px] md:w-[4px] h-[0.85em] ml-1 md:ml-2 rounded-full bg-gradient-to-b from-primary to-cyan-400 align-middle shadow-lg shadow-primary/50 transition-opacity duration-100 ${
+                showCursor ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          )}
         </span>
       </h1>
 
@@ -94,13 +105,13 @@ function AnimatedTitle() {
         <div className="h-[2px] w-8 md:w-16 bg-gradient-to-l from-transparent via-primary/50 to-primary rounded-full animate-pulse" />
       </div>
 
-      <div className="absolute -inset-10 md:-inset-20 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-float-slow opacity-70 shadow-lg shadow-primary/50" />
-        <div className="absolute top-1/4 right-5 md:right-10 w-2 md:w-3 h-2 md:h-3 bg-cyan-400 rounded-full animate-float opacity-50 shadow-lg shadow-cyan-400/50" />
-        <div className="absolute bottom-5 md:bottom-10 left-1/3 w-1 md:w-1.5 h-1 md:h-1.5 bg-primary rounded-full animate-float-slow opacity-60" />
-        <div className="absolute top-1/3 left-2 md:left-5 w-1.5 md:w-2 h-1.5 md:h-2 bg-cyan-300 rounded-full animate-float opacity-40" />
-        <div className="absolute bottom-1/4 right-1/4 w-1 h-1 bg-white rounded-full animate-ping opacity-80" />
-        <div className="absolute top-1/2 left-5 md:left-10 w-1 h-1 bg-cyan-400 rounded-full animate-ping delay-300 opacity-60" />
+      <div className="absolute -inset-10 md:-inset-20 pointer-events-none overflow-hidden" suppressHydrationWarning>
+        <div className="absolute top-0 left-1/4 w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-float-slow opacity-70 shadow-lg shadow-primary/50" suppressHydrationWarning />
+        <div className="absolute top-1/4 right-5 md:right-10 w-2 md:w-3 h-2 md:h-3 bg-cyan-400 rounded-full animate-float opacity-50 shadow-lg shadow-cyan-400/50" suppressHydrationWarning />
+        <div className="absolute bottom-5 md:bottom-10 left-1/3 w-1 md:w-1.5 h-1 md:h-1.5 bg-primary rounded-full animate-float-slow opacity-60" suppressHydrationWarning />
+        <div className="absolute top-1/3 left-2 md:left-5 w-1.5 md:w-2 h-1.5 md:h-2 bg-cyan-300 rounded-full animate-float opacity-40" suppressHydrationWarning />
+        <div className="absolute bottom-1/4 right-1/4 w-1 h-1 bg-white rounded-full animate-ping opacity-80" suppressHydrationWarning />
+        <div className="absolute top-1/2 left-5 md:left-10 w-1 h-1 bg-cyan-400 rounded-full animate-ping delay-300 opacity-60" suppressHydrationWarning />
       </div>
     </div>
   )
@@ -149,9 +160,9 @@ export default function HeroSection() {
       </a>
 
       {/* Decorative Elements */}
-      <div className="absolute top-1/4 left-5 md:left-10 w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-pulse hidden sm:block" />
-      <div className="absolute top-1/3 right-10 md:right-20 w-2 md:w-3 h-2 md:h-3 bg-cyan-400 rounded-full animate-pulse delay-150 hidden sm:block" />
-      <div className="absolute bottom-1/3 left-10 md:left-20 w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-pulse delay-300 hidden sm:block" />
+      <div className="absolute top-1/4 left-5 md:left-10 w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-pulse hidden sm:block" suppressHydrationWarning />
+      <div className="absolute top-1/3 right-10 md:right-20 w-2 md:w-3 h-2 md:h-3 bg-cyan-400 rounded-full animate-pulse delay-150 hidden sm:block" suppressHydrationWarning />
+      <div className="absolute bottom-1/3 left-10 md:left-20 w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-pulse delay-300 hidden sm:block" suppressHydrationWarning />
     </section>
   )
 }

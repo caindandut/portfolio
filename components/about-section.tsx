@@ -23,7 +23,7 @@ export default function AboutSection() {
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Section Header */}
         <div
-          className={`text-center mb-12 md:mb-16 transition-all duration-700 ${
+          className={`text-center mb-12 md:mb-16 transition-all duration-700 ease-out ${
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
@@ -34,8 +34,8 @@ export default function AboutSection() {
         </div>
 
         <div
-          className={`flex justify-center transition-all duration-700 delay-200 ${
-            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          className={`flex justify-center transition-all duration-700 ease-out delay-200 ${
+            isInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
           }`}
         >
           <Card className="glass-card border-border/50 p-6 md:p-8 max-w-xl w-full hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10 hover:scale-[1.02]">

@@ -40,7 +40,7 @@ export default function ContactSection() {
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Section Header */}
         <div
-          className={`text-center mb-12 md:mb-16 transition-all duration-700 ${
+          className={`text-center mb-12 md:mb-16 transition-all duration-700 ease-out ${
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
@@ -50,19 +50,22 @@ export default function ContactSection() {
           <div className="w-20 md:w-24 h-1 bg-gradient-to-r from-primary to-cyan-400 mx-auto rounded-full mt-4" />
         </div>
 
-        <div
-          className={`grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 transition-all duration-700 delay-200 ${
-            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
-          {socialLinks.map((link, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          {socialLinks.map((link, index) => {
+            // Slide from right for first item, left for second item
+            const slideDirection = index === 0 ? "translate-x-10" : "-translate-x-10"
+            const slideDirectionActive = "translate-x-0"
+            
+            return (
             <a
               key={link.name}
               href={link.href}
               target={link.name === "GitHub" ? "_blank" : undefined}
               rel={link.name === "GitHub" ? "noopener noreferrer" : undefined}
-              className="group"
-              style={{ transitionDelay: `${index * 100 + 200}ms` }}
+              className={`group transition-all duration-700 ease-out ${
+                isInView ? `opacity-100 ${slideDirectionActive} scale-100` : `opacity-0 ${slideDirection} scale-95`
+              }`}
+              style={{ transitionDelay: `${index * 150 + 200}ms` }}
             >
               <Card className="glass-card border-border/50 hover:border-primary/50 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-primary/10 group-hover:scale-[1.02]">
                 <CardContent className="p-4 md:p-6 flex items-center gap-3 md:gap-4">
@@ -79,7 +82,8 @@ export default function ContactSection() {
                 </CardContent>
               </Card>
             </a>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>
