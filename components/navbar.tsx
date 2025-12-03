@@ -21,14 +21,34 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50)
 
       const sections = navLinks.map((link) => link.id)
-      for (const section of sections.reverse()) {
+      const scrollPosition = window.scrollY + 200 // Offset để detect section sớm hơn
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+
+      // Kiểm tra nếu đã scroll gần cuối trang (trong phần contact)
+      if (scrollPosition + windowHeight >= documentHeight - 100) {
+        setActiveSection("contact")
+        return
+      }
+
+      // Duyệt ngược từ cuối lên để tìm section đang active
+      for (const section of [...sections].reverse()) {
         const element = document.getElementById(section)
-        if (element && window.scrollY >= element.offsetTop - 200) {
-          setActiveSection(section)
-          break
+        if (element) {
+          const rect = element.getBoundingClientRect()
+          const elementTop = rect.top + window.scrollY
+          
+          if (scrollPosition >= elementTop - 200) {
+            setActiveSection(section)
+            break
+          }
         }
       }
     }
+    
+    // Gọi ngay khi component mount để set active section ban đầu
+    handleScroll()
+    
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
